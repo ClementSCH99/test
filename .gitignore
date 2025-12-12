@@ -4,3 +4,6 @@ venv/
 .env
 *.log
 .DS_STORE
+logs/
+*.pub
+id_*

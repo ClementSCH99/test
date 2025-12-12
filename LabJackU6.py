@@ -8,7 +8,7 @@ import os
 
 class LabJackU6Controller:
 	
-	def __init__(self, log_dir="/home/pi/Desktop/20251106_BasicTests", log_file="LabJackU6.log"):
+	def __init__(self, log_dir="logs/", log_file="LabJackU6.log"):
 		
 		# --- Initialisation logger --- #
 		os.makedirs(log_dir, exist_ok=True)

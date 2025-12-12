@@ -21,7 +21,10 @@ def main():
 	start_t = time.time()
 
 	# Object instantiation
-	lj = LabJackU6Controller()
+	lj = LabJackU6Controller(
+		log_dir = "logs/",
+		log_file = "LabJackU6_Test.log"
+	)
 	
 	dl = DataLogger(
 		save_file = "BrakeTest_02.csv",
