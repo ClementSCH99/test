@@ -10,7 +10,7 @@ from LabJackU6 import LabJackU6Controller
 from DataLogger import DataLogger
 from controllers.brake_bench import BrakeBenchController
 from threads.acquisition import loop_acquisition
-from threads.logging import loop_logging
+from threads.saving import loop_logging
 from threads.plotting import loop_plotting
 from threads.hmi import loop_hmi
 
