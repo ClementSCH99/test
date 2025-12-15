@@ -27,6 +27,8 @@ def loop_acquisition(lj, controller, data_q, plot_q, running, start_t, interval)
 					val = lj.read_ain(ipt)
 				elif ipt.startswith("LC"):
 					val = lj.read_loadcell_force(ipt)
+				elif ipt.startswith("FIO"):
+					val = lj.read_dio(ipt)
 				else:
 					print(f"[WARN] Unknown input type: {ipt}")
 				inputs[ipt] = None if val is None else val
@@ -57,9 +59,6 @@ def loop_acquisition(lj, controller, data_q, plot_q, running, start_t, interval)
 				**inputs
 				}
 			plot_q.put(reduced_data)
-			
-			### FOR DEBUG PURPOSE
-			#print(f"Phase = {controller.phase} ; Load = {inputs['LC0']}")
 			
 			# Pause (theorically more consistent than time.sleep(interval)
 			next_sleep += interval

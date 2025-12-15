@@ -51,6 +51,13 @@ def main():
 		)
 	lj.tare_loadcell("LC0")
 
+
+	# DIO directions
+	lj.set_dio_direction("FIO0", "output")
+	lj.set_dio_direction("FIO1", "output")
+	lj.set_dio_direction("FIO2", "input")
+	lj.set_dio_direction("FIO3", "input")
+
 	# Data Queue & Buffer
 	data_q = queue.Queue()
 	plot_q = queue.Queue()

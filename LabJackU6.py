@@ -61,11 +61,11 @@ class LabJackU6Controller:
 			}
 
 		if pin_name not in self.dio_pins:
-			self.logger.warning(f"{direction_name} cannot be used as direction. PIN direction not set")
+			self.logger.warning(f"{pin_name} is not a DIO. PIN direction not set")
 			return
 
 		if direction_name not in direction_dict:
-			self.logger.warning(f"{pin_name} is not a DIO. PIN direction not set")
+			self.logger.warning(f"{direction_name} cannot be used as direction. PIN direction not set")
 			return
 		
 		try:
@@ -98,7 +98,7 @@ class LabJackU6Controller:
 		
 		try:
 			r = self.d.getFeedback(u6.BitStateRead(self.dio_pins[pin_name]))
-			state = r[0]["State"]
+			state = bool(r[0])
 			self.logger.debug(f"{pin_name} reads {state}")
 			return state
 		except Exception as e:

@@ -123,7 +123,6 @@ class BrakeBenchController(BaseController):
 		if force > self.target_down:
 			self.states["FIO0"] = 1
 			self.states["FIO1"] = 1
-			self.phase_start = time.time()
 			return self.transition("wait_after_pull")
 		return None
 	
