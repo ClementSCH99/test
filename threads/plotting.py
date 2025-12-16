@@ -1,13 +1,14 @@
 # threads/plotting.py
 
 import time
+import os
 import plotly.graph_objects as go
 import plotly.io as pio
 
 from collections import deque
 from queue import Empty
 
-def loop_plotting(plot_q, running, interval: float = 60, maxlen = 5000):
+def loop_plotting(plot_q, running, plot_file, plot_dir="logs/",	 interval: float = 60, maxlen = 5000):
 	"""
 	Thread to plot data from plot_q.
 	Continiously extract data from plot_q until its empty. 
@@ -48,7 +49,11 @@ def loop_plotting(plot_q, running, interval: float = 60, maxlen = 5000):
 					#yaxis_range=[0,5]
 					)
 
-				pio.write_html(fig, file="plot_02.html", auto_open=False)
+				pio.write_html(
+					fig,
+					file=os.path.join(plot_dir, plot_file),
+					auto_open=False
+					)
 			
 			total = 0
 			while total < interval and running.is_set():
@@ -57,7 +62,6 @@ def loop_plotting(plot_q, running, interval: float = 60, maxlen = 5000):
 	
 	except Exception as e:
 		print(f"Error in plotting thread: {e}")
-		traceback.print_exc()
 		time.sleep(0.01)
 	
 	finally:

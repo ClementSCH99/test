@@ -9,10 +9,11 @@ from collections import deque
 from LabJackU6 import LabJackU6Controller
 from DataLogger import DataLogger
 from controllers.brake_bench import BrakeBenchController
+from controllers.trim_bench import TrimBenchController
 from threads.acquisition import loop_acquisition
 from threads.logging import loop_logging
 from threads.plotting import loop_plotting
-from threads.hmi import loop_hmi
+from threads.hmi import loop_hmi_brake, loop_hmi_trim
 
 
 def main():
@@ -28,16 +29,22 @@ def main():
 	
 	dl = DataLogger(
 		save_file = "BrakeTest_02.csv",
+		save_dir = "logs/",
 		autosave_interval = 300,
 		autosave_file = "BrakeTest_autosave_02.csv"
 		)
 		
-	ctrl = BrakeBenchController(
-		target_up = -111,	#Newton
-		target_down = -5,	#Newton
-		max_cycles = 50000,
-		rest_time = 0.35
-		)
+	# ctrl = BrakeBenchController(
+	# 	target_up = -111,	#Newton
+	# 	target_down = -5,	#Newton
+	# 	max_cycles = 50000,
+	# 	rest_time = 0.35
+	# 	)
+
+	ctrl = TrimBenchController(
+		max_cycles=10,
+		rest_time=0.001
+	)
 
 	# LoadCell initialisation
 	lj.add_loadcell(
@@ -50,7 +57,6 @@ def main():
 		gain_idx = 3
 		)
 	lj.tare_loadcell("LC0")
-
 
 	# DIO directions
 	lj.set_dio_direction("FIO0", "output")
@@ -80,14 +86,14 @@ def main():
 		daemon = True
 		)
 	
-	plt_th = threading.Thread(
-		target = loop_plotting,
-		args = (plot_q, running, 300),
-		daemon = True
-		)
+	# plt_th = threading.Thread(
+	# 	target = loop_plotting,
+	# 	args = (plot_q, running, "plot_02.html", "logs/", 300),
+	# 	daemon = True
+	# 	)
 	
 	hmi_th = threading.Thread(
-		target = loop_hmi,
+		target = loop_hmi_trim,
 		args = (ctrl, running, 1.0),
 		daemon = True
 		)
@@ -96,7 +102,7 @@ def main():
 	hmi_th.start()
 	acq_th.start()
 	log_th.start()
-	plt_th.start()
+	#plt_th.start()
 	print("Threads started. Press CTRL+C to stop.")
 	
 
@@ -115,7 +121,7 @@ def main():
 		hmi_th.join()
 		acq_th.join()
 		log_th.join()
-		plt_th.join()
+		#plt_th.join()
 		
 		lj.close(1)
 
